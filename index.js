@@ -1,10 +1,14 @@
 const express=require("express");
+const fs=require("fs");
 
 //import user from json file
 const users=require("./MOCK_DATA (1).json");
 
 
 const app= express();
+
+//middleware
+app.use(express.urlencoded({extended:false}))
 
 //--server side rendering
 app.get("/user",(req,res)=>{
@@ -40,6 +44,19 @@ app.get("/api/user/:id",(req,res)=>{
     const id=req.params.id;
     const user=users.find((user)=>user.id==id);
     res.json(user);
+})
+
+app.post("/api/user",(req,res)=>{
+
+    const body=req.body;
+
+    console.log(body);
+
+    users.push({...body,id:users.length+1});
+    fs.writeFile("./MOCK_DATA (1).json",JSON.stringify(users),(error,response)=>{
+
+    });
+
 })
 
 app.listen(8000,()=>{
